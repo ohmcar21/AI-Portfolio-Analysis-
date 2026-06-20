@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import HoldingsTable from "../components/HoldingsTable";
+
 
 export default function Home() {
   const [health, setHealth] = useState<any>(null);
@@ -90,6 +92,8 @@ export default function Home() {
         ) : (
           <p>Loading...</p>
         )}
+        {/* Holdings Table placed below the summary */}
+        <HoldingsTable holdings={summary?.holdings ?? []} />
       </div>
     </main>
   );
