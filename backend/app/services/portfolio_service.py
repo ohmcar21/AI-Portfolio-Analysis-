@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.broker.interface import BrokerInterface
 from app.models.holding import Holding
 from app.models.portfolio_snapshot import PortfolioSnapshot
+from app.sector_mapping import NSE_SECTOR_MAPPING
 
 
 class PortfolioService:
@@ -82,13 +83,13 @@ class PortfolioService:
                     user_id=user_id,
                     snapshot_id=next_snapshot_id,
                     symbol=record["symbol"],
-                    exchange="NSE",
+                    exchange=record.get("exchange", "NSE"),
                     quantity=record["quantity"],
                     average_price=record["avg_price"],
                     current_price=record["current_price"],
-                    sector="Unknown",
+                    sector=NSE_SECTOR_MAPPING.get(record["symbol"].upper().strip(), "Unknown"),
                     market_cap_category="LARGE",
-                    day_change_pct=0,
+                    day_change_pct=record.get("day_change_pct", 0),
                 )
                 self.db.add(snapshot)
 
@@ -102,13 +103,13 @@ class PortfolioService:
                 holding = Holding(
                     user_id=user_id,
                     symbol=record["symbol"],
-                    exchange="NSE",
+                    exchange=record.get("exchange", "NSE"),
                     quantity=record["quantity"],
                     average_price=record["avg_price"],
                     current_price=record["current_price"],
-                    sector="Unknown",
+                    sector=NSE_SECTOR_MAPPING.get(record["symbol"].upper().strip(), "Unknown"),
                     market_cap_category="LARGE",
-                    day_change_pct=0,
+                    day_change_pct=record.get("day_change_pct", 0),
                 )
 
                 self.db.add(holding)
